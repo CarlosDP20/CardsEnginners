@@ -1,3 +1,6 @@
 # CardsEnginners
  CardsEnginners
-ESTO ES UNA PRUEBA
+Esta es una pagina web para :
+-  listar habilidades
+-  ver ingenieros
+-  hacer pupu
