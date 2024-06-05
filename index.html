@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pedido de Edmar</title>
+  <style>
+    /* Estilos CSS */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f2f5;
+      transition: background-color 0.3s ease-in-out;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin-left: 250px; /* Ajuste para el sidebar */
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      font-size: 2em;
+    }
+
+    form {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #555;
+    }
+
+    input[type="text"], select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      transition: border-color 0.3s ease-in-out;
+    }
+
+    input[type="text"]:focus, select:focus {
+      border-color: #007bff;
+    }
+
+    #skills-container {
+      margin-bottom: 10px;
+    }
+
+    .skill {
+      display: flex;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+
+    .skill input[type="text"] {
+      flex: 1;
+    }
+
+    .skill select {
+      width: 60px;
+      margin-left: 10px;
+    }
+
+    #img-container {
+      margin-bottom: 10px;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+      margin-bottom: 10px;
+      border: 2px solid #000;
+      background-color: #000;
+      padding: 5px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease-in-out;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #cards-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      gap: 20px;
+    }
+
+    .card {
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      position: relative;
+      flex: 1 1 200px;
+      transition: transform 0.3s ease-in-out;
+      background-color: #fff;
+      box-sizing: border-box;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-content {
+      padding-bottom: 30px;
+    }
+
+    .card p {
+      margin: 0;
+    }
+
+    .card h2 {
+      margin-top: 0;
+    }
+
+    .delete-btn {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      background-color: #ff5c5c;
+      border: none;
+      border-radius: 4px;
+      padding: 6px 10px;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease-in-out;
+    }
+
+    .delete-btn:hover {
+      background-color: #ff3333;
+    }
+
+    #search {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      transition: border-color 0.3s ease-in-out;
+    }
+
+    #search:focus {
+      border-color: #007bff;
+    }
+
+    .sidebar {
+      height: 100%;
+      width: 250px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background-color: #111;
+      padding-top: 20px;
+      transition: width 0.3s ease;
+    }
+
+    .sidebar a {
+      padding: 15px 25px;
+      text-decoration: none;
+      font-size: 18px;
+      color: white;
+      display: block;
+      transition: background-color 0.3s ease;
+    }
+
+    .sidebar a:hover {
+      background-color: #575757;
+    }
+
+    #create-card-form {
+      display: none; /* Oculto por defecto */
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 20px;
+      background-color: #f1f1f1;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 10px;
+      position: relative;
+    }
+
+    .progress-bar div {
+      height: 100%;
+      text-align: center;
+      line-height: 20px;
+      color: white;
+      border-radius: 10px;
+    }
+
+    .progress-bar span {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: black;
+      font-weight: bold;
+    }
+
+    .progress-red {
+      background-color: #ff4c4c;
+    }
+
+    .progress-yellow {
+      background-color: #ffeb3b;
+      color: black;
+    }
+
+    .progress-green {
+      background-color: #4caf50;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2 style="color: white; text-align: center;">Menu</h2>
+    <a href="javascript:void(0)" id="show-form-btn">Crear Tarjeta</a>
+    <a href="admin.html">Admin Panel</a>
+  </div>
+  <div class="container">
+    <h1>Pedido de Edmar</h1>
+    <form id="card-form">
+      <div id="create-card-form">
+        <label for="name">Nombre:</label>
+        <input type="text" id="name" required>
+        <label for="lastname">Apellido:</label>
+        <input type="text" id="lastname" required>
+        <label for="country">País:</label>
+        <input type="text" id="country" required>
+        <label for="skills">Habilidades:</label>
+        <div id="skills-container">
+          <div class="skill">
+            <input type="text" class="skill-name" placeholder="Habilidad" required>
+            <select class="skill-rating" id="initial-skill-rating">
+              <!-- Opciones generadas dinámicamente por JavaScript -->
+            </select>
+          </div>
+        </div>
+        <button type="button" id="add-skill">Añadir Habilidad</button>
+        <label for="image">Imagen:</label>
+        <div id="img-container">
+          <input type="file" id="image" accept="image/*">
+        </div>
+        <button type="submit">Crear Tarjeta</button>
+      </div>
+    </form>
+    <input type="text" id="search" placeholder="Buscar por habilidad">
+    <div id="cards-container"></div>
+    <button id="save-json">Guardar Tarjetas en JSON</button>
+    <button id="import-json">Importar Tarjetas JSON</button>
+    <input type="file" id="import-file" style="display: none;">
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const form = document.getElementById("card-form");
+      const skillsContainer = document.getElementById("skills-container");
+      const addSkillBtn = document.getElementById("add-skill");
+      const cardsContainer = document.getElementById("cards-container");
+      const searchInput = document.getElementById("search");
+      const showFormBtn = document.getElementById("show-form-btn");
+      const createCardForm = document.getElementById("create-card-form");
+      const initialSkillRating = document.getElementById("initial-skill-rating");
+      const saveJsonBtn = document.getElementById("save-json");
+      const importJsonBtn = document.getElementById("import-json");
+      const importFileInput = document.getElementById("import-file");
+
+      let cards = [];
+
+      // Generar opciones para el primer skill rating al cargar la página
+      for (let i = 1; i <= 10; i++) {
+        const option = document.createElement("option");
+        option.value = i;
+        option.text = i;
+        initialSkillRating.appendChild(option);
+      }
+
+      if (localStorage.getItem("cards")) {
+        cards = JSON.parse(localStorage.getItem("cards"));
+        renderCards(cards);
+      }
+
+      showFormBtn.addEventListener("click", function() {
+        createCardForm.style.display = createCardForm.style.display === "none" ? "block" : "none";
+      });
+
+      form.addEventListener("submit", function(event) {
+        event.preventDefault();
+        const name = document.getElementById("name").value;
+        const lastname = document.getElementById("lastname").value;
+        const country = document.getElementById("country").value;
+        const skills = Array.from(document.querySelectorAll(".skill")).map(skill => ({
+          name: skill.querySelector(".skill-name").value,
+          rating: skill.querySelector(".skill-rating").value
+        }));
+        const imageInput = document.getElementById("image");
+        const image = imageInput.files[0];
+        const reader = new FileReader();
+        reader.onload = function() {
+          const imageDataURL = reader.result;
+          const newCard = { name, lastname, country, skills, image: imageDataURL };
+          cards.push(newCard);
+          localStorage.setItem("cards", JSON.stringify(cards));
+          renderCards(cards);
+        };
+        if (image) {
+          reader.readAsDataURL(image);
+        } else {
+          const newCard = { name, lastname, country, skills, image: null };
+          cards.push(newCard);
+          localStorage.setItem("cards", JSON.stringify(cards));
+          renderCards(cards);
+        }
+
+        form.reset();
+        skillsContainer.innerHTML = `<div class="skill">
+          <input type="text" class="skill-name" placeholder="Habilidad" required>
+          <select class="skill-rating">
+            ${Array.from({ length: 10 }, (_, i) => `<option value="${i + 1}">${i + 1}</option>`).join('')}
+          </select>
+        </div>`;
+        imageInput.value = ""; // Limpiar el campo de selección de imagen
+      });
+
+      addSkillBtn.addEventListener("click", function() {
+        const newSkill = document.createElement("div");
+        newSkill.classList.add("skill");
+        newSkill.innerHTML = `<input type="text" class="skill-name" placeholder="Habilidad" required>
+                              <select class="skill-rating">
+                                ${Array.from({ length: 10 }, (_, i) => `<option value="${i + 1}">${i + 1}</option>`).join('')}
+                              </select>`;
+        skillsContainer.appendChild(newSkill);
+      });
+
+      function renderCards(cardsToRender) {
+        cardsContainer.innerHTML = "";
+        // Ordenar las tarjetas por calificación de habilidades de mayor a menor
+        cardsToRender.sort((a, b) => {
+          const avgRatingA = calculateAvgRating(a.skills);
+          const avgRatingB = calculateAvgRating(b.skills);
+          return avgRatingB - avgRatingA;
+        });
+        cardsToRender.forEach((card, index) => {
+          const cardElement = document.createElement("div");
+          cardElement.classList.add("card");
+          cardElement.innerHTML = `
+            <div class="card-content">
+              <h2>${card.name} ${card.lastname}</h2>
+              <p><strong>País:</strong> ${card.country}</p>
+              ${card.image ? `<img src="${card.image}" alt="${card.name} ${card.lastname}">` : ""}
+              <p><strong>Habilidades:</strong></p>
+              <ul>
+                ${card.skills.map(skill => `
+                  <li>
+                    ${skill.name}
+                    <div class="progress-bar">
+                      <div class="${getProgressBarClass(skill.rating)}" style="width: ${skill.rating * 10}%;">
+                        <span>${skill.rating}/10</span>
+                      </div>
+                    </div>
+                  </li>
+                `).join("")}
+              </ul>
+            </div>
+            <button class="delete-btn" onclick="deleteCard(${index})">Eliminar</button>
+          `;
+          cardsContainer.appendChild(cardElement);
+        });
+      }
+
+      function calculateAvgRating(skills) {
+        const totalRating = skills.reduce((acc, skill) => acc + parseInt(skill.rating), 0);
+        return totalRating / skills.length;
+      }
+
+      function getProgressBarClass(rating) {
+        if (rating < 4) return 'progress-red';
+        if (rating < 7) return 'progress-yellow';
+        return 'progress-green';
+      }
+
+      window.deleteCard = function(index) {
+        cards.splice(index, 1);
+        localStorage.setItem("cards", JSON.stringify(cards));
+        renderCards(cards);
+      };
+
+      searchInput.addEventListener("input", function() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const filteredCards = cards.filter(card => card.skills.some(skill => skill.name.toLowerCase().includes(searchTerm)));
+        renderCards(filteredCards);
+      });
+
+      // Guardar tarjetas en archivo JSON
+      saveJsonBtn.addEventListener("click", function() {
+        const dataStr = JSON.stringify(cards, null, 2);
+        const blob = new Blob([dataStr], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "cards.json";
+        a.click();
+        URL.revokeObjectURL(url);
+      });
+
+      // Importar tarjetas desde archivo JSON
+      importJsonBtn.addEventListener("click", function() {
+        importFileInput.click();
+      });
+
+      importFileInput.addEventListener("change", function(event) {
+        const file = event.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            const importedCards = JSON.parse(e.target.result);
+            cards = importedCards;
+            localStorage.setItem("cards", JSON.stringify(cards));
+            renderCards(cards);
+          };
+          reader.readAsText(file);
+        }
+      });
+
+      // Cargar configuración guardada
+      if (localStorage.getItem("settings")) {
+        const settings = JSON.parse(localStorage.getItem("settings"));
+        document.body.style.backgroundColor = settings.backgroundColor;
+        document.body.style.fontFamily = settings.fontFamily;
+      }
+    });
+  </script>
+</body>
+</html>

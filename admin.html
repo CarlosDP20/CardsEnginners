@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel</title>
+  <style>
+    /* Estilos CSS para el panel de administración */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f5f5f5;
+      transition: background-color 0.3s ease-in-out;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input[type="color"], select {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      transition: border-color 0.3s ease-in-out;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease-in-out;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .link-btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #008CBA;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      text-decoration: none;
+      text-align: center;
+      cursor: pointer;
+      transition: background-color 0.3s ease-in-out;
+    }
+
+    .link-btn:hover {
+      background-color: #005f6a;
+    }
+
+    #admin-login {
+      max-width: 400px;
+      margin: 100px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    #admin-login input[type="password"] {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      transition: border-color 0.3s ease-in-out;
+    }
+
+    #admin-login button {
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="admin-login">
+    <h1>Admin Login</h1>
+    <input type="password" id="admin-password" placeholder="Contraseña">
+    <button id="login-btn">Ingresar</button>
+  </div>
+  <div class="container" id="admin-panel" style="display:none;">
+    <h1>Admin Panel</h1>
+    <label for="background-color">Color de Fondo:</label>
+    <input type="color" id="background-color" value="#f5f5f5">
+    <label for="font-family">Tipo de Fuente:</label>
+    <select id="font-family">
+      <option value="Arial" selected>Arial</option>
+      <option value="Verdana">Verdana</option>
+      <option value="Times New Roman">Times New Roman</option>
+      <option value="Georgia">Georgia</option>
+      <option value="Courier New">Courier New</option>
+    </select>
+    <label for="card-color">Color de Tarjetas:</label>
+    <input type="color" id="card-color" value="#ffffff">
+    <button id="save-settings">Guardar Configuración</button>
+    <a href="index.html" class="link-btn">Volver</a>
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const adminPassword = 'admin123'; // Contraseña de ejemplo
+      const adminLogin = document.getElementById("admin-login");
+      const adminPanel = document.getElementById("admin-panel");
+      const loginBtn = document.getElementById("login-btn");
+      const backgroundColorInput = document.getElementById("background-color");
+      const fontFamilySelect = document.getElementById("font-family");
+      const cardColorInput = document.getElementById("card-color");
+      const saveSettingsBtn = document.getElementById("save-settings");
+
+      // Cargar configuración guardada
+      if (localStorage.getItem("settings")) {
+        const settings = JSON.parse(localStorage.getItem("settings"));
+        document.body.style.backgroundColor = settings.backgroundColor;
+        document.body.style.fontFamily = settings.fontFamily;
+        backgroundColorInput.value = settings.backgroundColor;
+        fontFamilySelect.value = settings.fontFamily;
+        cardColorInput.value = settings.cardColor;
+      }
+
+      loginBtn.addEventListener("click", function() {
+        const password = document.getElementById("admin-password").value;
+        if (password === adminPassword) {
+          adminLogin.style.display = "none";
+          adminPanel.style.display = "block";
+        } else {
+          alert("Contraseña incorrecta!");
+        }
+      });
+
+      saveSettingsBtn.addEventListener("click", function() {
+        const backgroundColor = backgroundColorInput.value;
+        const fontFamily = fontFamilySelect.value;
+        const cardColor = cardColorInput.value;
+        const settings = { backgroundColor, fontFamily, cardColor };
+        localStorage.setItem("settings", JSON.stringify(settings));
+        alert("Configuración guardada!");
+      });
+    });
+  </script>
+</body>
+</html>
