@@ -87,18 +87,13 @@ input[type="text"], input[type="file"], select {
   margin: 10px 0;
 }
 
-.card h2 {
-  font-size: 22px;
-  margin-bottom: 10px;
-}
-
-.skills-list, .hidden-skills-list {
+.skills-list {
   list-style-type: none;
   padding: 0;
 }
 
-.skills-list li, .hidden-skills-list li {
-  margin: 8px 0;
+.skill {
+  margin-bottom: 10px;
 }
 
 .progress-bar {
@@ -126,50 +121,4 @@ input[type="text"], input[type="file"], select {
 
 .progress-green {
   background-color: #2ecc71;
-}
-
-.card-content {
-  margin: 10px 0;
-}
-
-.skills-list, .hidden-skills-list {
-  list-style-type: none;
-  padding: 0;
-  overflow: hidden; /* Oculta el contenido que se desborda */
-  max-height: 200px; /* Altura máxima inicial para mostrar las primeras habilidades */
-  transition: max-height 0.3s ease-out; /* Transición suave de altura máxima */
-}
-
-.hidden-skills-list {
-  list-style-type: none;
-  padding: 0;
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease-out;
-}
-
-.hidden-skills-list:not(.hidden-skills-list) {
-  max-height: 200px; /* Ajusta según sea necesario */
-}
-
-.show-skills {
-  max-height: 200px; /* Ajusta según sea necesario */
-}
-
-.toggle-skills-btn {
-  display: block;
-  padding: 10px 20px;
-  margin-top: 10px;
-  font-size: 14px;
-  color: #007BFF;
-  background-color: transparent;
-  border: 1px solid #007BFF;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
-}
-
-.toggle-skills-btn:hover {
-  background-color: #007BFF;
-  color: #fff;
 }
