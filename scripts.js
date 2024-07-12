@@ -43,6 +43,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }));
     const imageInput = document.getElementById("image");
     const image = imageInput.files[0];
+
     const reader = new FileReader();
     reader.onload = function() {
       const imageDataURL = reader.result;
@@ -59,7 +60,8 @@ document.addEventListener("DOMContentLoaded", function() {
     if (image) {
       reader.readAsDataURL(image);
     } else {
-      const newCard = { name, lastname, country, skills, image: null };
+      const existingImage = editIndex !== null ? cards[editIndex].image : null;
+      const newCard = { name, lastname, country, skills, image: existingImage };
       if (editIndex !== null) {
         cards[editIndex] = newCard;
         editIndex = null;
@@ -74,6 +76,8 @@ document.addEventListener("DOMContentLoaded", function() {
       <input type="text" class="skill-name" placeholder="Habilidad" required>
       <select class="skill-rating"></select>
     </div>`;
+    addRatingOptions(document.querySelector(".skill-rating"));
+    imageInput.value = "";
   });
 
   addSkillBtn.addEventListener("click", addSkill);
@@ -81,65 +85,127 @@ document.addEventListener("DOMContentLoaded", function() {
   removeSkillBtn.addEventListener("click", function() {
     const skills = document.querySelectorAll(".skill");
     if (skills.length > 1) {
-      skills[skills.length - 1].remove();
+      skillsContainer.removeChild(skills[skills.length - 1]);
     }
   });
 
-  function renderCards(cardsToShow) {
+  function renderCards(cardsToRender) {
     cardsContainer.innerHTML = "";
-    if (cardsToShow.length === 0) {
-      cardsContainer.innerHTML = "<p>No hay tarjetas para mostrar.</p>";
-    } else {
-      cardsToShow.forEach((card, index) => {
+
+    // Agrupar cartas por país
+    const cardsByCountry = {};
+    cardsToRender.forEach(card => {
+      if (!cardsByCountry[card.country]) {
+        cardsByCountry[card.country] = [];
+      }
+      cardsByCountry[card.country].push(card);
+    });
+
+    // Renderizar las cartas agrupadas por país
+    for (const country in cardsByCountry) {
+      const countryDivider = document.createElement("div");
+      countryDivider.classList.add("country-divider");
+      countryDivider.textContent = `País: ${country}`;
+      cardsContainer.appendChild(countryDivider);
+
+      cardsByCountry[country].forEach((card, index) => {
+        const sortedSkills = card.skills.slice().sort((a, b) => b.rating - a.rating);
+        const visibleSkills = sortedSkills.slice(0, 5);
+        const hiddenSkills = sortedSkills.slice(5);
         const cardElement = document.createElement("div");
         cardElement.classList.add("card");
         cardElement.innerHTML = `
-          <img src="${card.image ? card.image : 'placeholder.png'}" alt="Foto de perfil">
           <div class="card-content">
             <h2>${card.name} ${card.lastname}</h2>
             <p><strong>País:</strong> ${card.country}</p>
-            <h3>Habilidades:</h3>
+            ${card.image ? `<img src="${card.image}" alt="${card.name} ${card.lastname}">` : ""}
+            <p><strong>Habilidades:</strong></p>
             <ul class="skills-list">
-              ${card.skills.map(renderSkill).join('')}
+              ${visibleSkills.map(skill => renderSkill(skill)).join('')}
             </ul>
-          </div>
-          <button onclick="editCard(${index})">Editar</button>
-          <button onclick="deleteCard(${index})">Eliminar</button>
-        `;
+            ${hiddenSkills.length > 0 ? `<button class="toggle-skills-btn">Mostrar más habilidades (${hiddenSkills.length})</button>
+            <ul class="hidden-skills-list" style="max-height: 0; overflow: hidden;">
+              ${hiddenSkills.map(skill => renderSkill(skill)).join('')}
+            </ul>` : ""}
+            <button class="edit-card-btn" data-index="${index}">Editar</button>
+            <button class="delete-card-btn" data-index="${index}">Eliminar</button>
+          </div>`;
         cardsContainer.appendChild(cardElement);
       });
     }
+
+    attachToggleSkillsListeners();
+    attachEditCardListeners();
+    attachDeleteCardListeners();
   }
 
   function renderSkill(skill) {
-    const progressColor = skill.rating <= 3 ? 'progress-red' : skill.rating <= 7 ? 'progress-yellow' : 'progress-green';
+    const progressColor = skill.rating <= 3 ? 'red' : skill.rating <= 7 ? 'yellow' : 'green';
     return `
       <li>
         <div class="progress-bar">
-          <div class="${progressColor}" style="width: ${skill.rating * 10}%;">${skill.name} (${skill.rating}/10)</div>
+          <div class="progress-${progressColor}" style="width: ${skill.rating * 10}%;">${skill.name} (${skill.rating}/10)</div>
         </div>
       </li>`;
   }
 
+  function attachToggleSkillsListeners() {
+    const toggleSkillsBtns = document.querySelectorAll('.toggle-skills-btn');
+    toggleSkillsBtns.forEach(btn => {
+      btn.addEventListener('click', function() {
+        const hiddenSkillsList = this.nextElementSibling;
+        if (hiddenSkillsList.style.maxHeight) {
+          hiddenSkillsList.style.maxHeight = null;
+        } else {
+          hiddenSkillsList.style.maxHeight = hiddenSkillsList.scrollHeight + "px";
+        }
+      });
+    });
+  }
+
+  function attachEditCardListeners() {
+    const editCardBtns = document.querySelectorAll('.edit-card-btn');
+    editCardBtns.forEach(btn => {
+      btn.addEventListener('click', function() {
+        const index = this.getAttribute('data-index');
+        editCard(index);
+      });
+    });
+  }
+
   function editCard(index) {
-    const cardToEdit = cards[index];
-    document.getElementById("name").value = cardToEdit.name;
-    document.getElementById("lastname").value = cardToEdit.lastname;
-    document.getElementById("country").value = cardToEdit.country;
-    document.getElementById("image").value = "";
+    const card = cards[index];
+    document.getElementById("name").value = card.name;
+    document.getElementById("lastname").value = card.lastname;
+    document.getElementById("country").value = card.country;
     skillsContainer.innerHTML = "";
-    cardToEdit.skills.forEach(skill => {
+    card.skills.forEach(skill => {
       const newSkill = document.createElement("div");
       newSkill.classList.add("skill");
-      newSkill.innerHTML = `<input type="text" class="skill-name" value="${skill.name}" required>
-                            <select class="skill-rating"></select>`;
-      const selectElement = newSkill.querySelector(".skill-rating");
-      addRatingOptions(selectElement);
-      selectElement.value = skill.rating;
+      newSkill.innerHTML = `<input type="text" class="skill-name" placeholder="Habilidad" value="${skill.name}" required>
+                            <select class="skill-rating">${Array.from({ length: 10 }, (_, i) => `<option value="${i + 1}" ${i + 1 == skill.rating ? 'selected' : ''}>${i + 1}</option>`).join('')}</select>`;
       skillsContainer.appendChild(newSkill);
     });
+    addRatingOptions(document.querySelector(".skill-rating"));
+    document.getElementById("image").value = "";
+
+    // Mostrar el formulario si está oculto
+    createCardForm.style.display = "block";
+
+    // Desplazarse a la sección de edición
+    createCardForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
     editIndex = index;
-    window.scrollTo(0, 0);
+  }
+
+  function attachDeleteCardListeners() {
+    const deleteCardBtns = document.querySelectorAll('.delete-card-btn');
+    deleteCardBtns.forEach(btn => {
+      btn.addEventListener('click', function() {
+        const index = this.getAttribute('data-index');
+        deleteCard(index);
+      });
+    });
   }
 
   function deleteCard(index) {
@@ -149,26 +215,28 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   searchInput.addEventListener("input", function() {
-    const searchTerm = searchInput.value.trim().toLowerCase();
-    const filteredCards = cards.filter(card =>
-      card.name.toLowerCase().includes(searchTerm) ||
-      card.lastname.toLowerCase().includes(searchTerm) ||
-      card.country.toLowerCase().includes(searchTerm)
-    );
+    const searchTerm = searchInput.value.toLowerCase();
+    const filteredCards = cards.filter(card => card.skills.some(skill => skill.name.toLowerCase().includes(searchTerm)));
+    filteredCards.forEach(card => {
+      const skillIndex = card.skills.findIndex(skill => skill.name.toLowerCase().includes(searchTerm));
+      if (skillIndex !== -1) {
+        const skill = card.skills[skillIndex];
+        const remainingSkills = card.skills.slice();
+        remainingSkills.splice(skillIndex, 1);
+        card.skills = [skill, ...remainingSkills];
+      }
+    });
     renderCards(filteredCards);
   });
 
   saveJsonBtn.addEventListener("click", function() {
-    const json = JSON.stringify(cards, null, 2);
-    const blob = new Blob([json], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "cards.json";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    const dataStr = JSON.stringify(cards, null, 2);
+    const downloadAnchorNode = document.createElement("a");
+    downloadAnchorNode.setAttribute("href", "data:text/json;charset=utf-8," + encodeURIComponent(dataStr));
+    downloadAnchorNode.setAttribute("download", "cards.json");
+    document.body.appendChild(downloadAnchorNode);
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
   });
 
   importJsonBtn.addEventListener("click", function() {
@@ -177,31 +245,30 @@ document.addEventListener("DOMContentLoaded", function() {
 
   importFileInput.addEventListener("change", function() {
     const file = importFileInput.files[0];
-    const reader = new FileReader();
-    reader.onload = function(event) {
-      const importedCards = JSON.parse(event.target.result);
-      if (Array.isArray(importedCards)) {
-        cards = importedCards;
-        localStorage.setItem("cards", JSON.stringify(cards));
-        renderCards(cards);
-      } else {
-        alert("El archivo JSON debe contener un arreglo de tarjetas.");
-      }
-    };
-    reader.readAsText(file);
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const importedCards = JSON.parse(event.target.result);
+        if (Array.isArray(importedCards)) {
+          cards = importedCards;
+          localStorage.setItem("cards", JSON.stringify(cards));
+          renderCards(cards);
+        } else {
+          alert("El archivo seleccionado no contiene datos válidos.");
+        }
+      };
+      reader.readAsText(file);
+    }
   });
 
   showFormBtn.addEventListener("click", function() {
-    createCardForm.classList.toggle("card-form");
-    showFormBtn.textContent = createCardForm.classList.contains("card-form") ? "Ocultar formulario" : "Mostrar formulario";
-    form.reset();
-    skillsContainer.innerHTML = `<div class="skill">
-      <input type="text" class="skill-name" placeholder="Habilidad" required>
-      <select class="skill-rating"></select>
-    </div>`;
-    addRatingOptions(document.querySelector(".skill-rating"));
-    editIndex = null;
+    createCardForm.style.display = "block";
   });
 
-  renderCards(cards);
+  function init() {
+    renderCards(cards);
+    addRatingOptions(document.querySelector(".skill-rating"));
+  }
+
+  init();
 });

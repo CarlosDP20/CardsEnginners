@@ -1,49 +1,42 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gestor de Tarjetas de Habilidades</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MTSolutions - Gestión de Habilidades</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header>
-    <img src="logo.png" alt="Logo" class="logo">
-    <h1>Gestor de Tarjetas de Habilidades</h1>
-  </header>
-  
-  <main>
-    <button id="showFormBtn">Mostrar formulario</button>
-    
-    <form id="createCardForm">
-      <div class="card-form" id="form">
-        <input type="text" id="name" placeholder="Nombre" required>
-        <input type="text" id="lastname" placeholder="Apellido" required>
-        <input type="text" id="country" placeholder="País" required>
-        <input type="file" id="image" accept="image/*">
-        
-        <div id="skillsContainer">
-          <div class="skill">
-            <input type="text" class="skill-name" placeholder="Habilidad" required>
-            <select class="skill-rating"></select>
-          </div>
+    <header>
+        <img src="MTSolutions_cp_cmyk.jpg" alt="MTSolutions Logo" class="logo">
+        <h1>MTSolutions - Gestión de Habilidades</h1>
+    </header>
+    <main>
+        <button id="showFormBtn">Crear nueva tarjeta</button>
+        <div id="createCardForm" class="card-form">
+            <form id="form">
+                <input type="text" id="name" placeholder="Nombre" required>
+                <input type="text" id="lastname" placeholder="Apellido" required>
+                <input type="text" id="country" placeholder="País" required>
+                <div id="skillsContainer">
+                    <div class="skill">
+                        <input type="text" class="skill-name" placeholder="Habilidad" required>
+                        <select class="skill-rating"></select>
+                    </div>
+                </div>
+                <button type="button" id="addSkillBtn">Agregar habilidad</button>
+                <button type="button" id="removeSkillBtn">Eliminar última habilidad</button>
+                <input type="file" id="image" accept="image/*">
+                <button type="submit">Crear tarjeta</button>
+            </form>
         </div>
-        
-        <button type="button" id="addSkillBtn">Agregar habilidad</button>
-        <button type="button" id="removeSkillBtn">Quitar habilidad</button>
-        <button type="submit">Guardar tarjeta</button>
-      </div>
-    </form>
-    
-    <input type="text" id="searchInput" placeholder="Buscar...">
-    
-    <div id="cardsContainer"></div>
-    
-    <button id="saveJsonBtn">Guardar JSON</button>
-    <button id="importJsonBtn">Importar JSON</button>
-    <input type="file" id="importFileInput" accept=".json">
-  </main>
-
-  <script src="scripts.js"></script>
+        <input type="text" id="searchInput" placeholder="Buscar habilidad...">
+        <div id="cardsContainer"></div>
+        <button id="saveJsonBtn">Guardar tarjetas en JSON</button>
+        <button id="importJsonBtn">Importar tarjetas desde JSON</button>
+        <input type="file" id="importFileInput" accept="application/json" style="display: none;">
+    </main>
+    <script src="scripts.js"></script>
 </body>
 </html>
