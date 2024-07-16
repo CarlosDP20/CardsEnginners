@@ -68,6 +68,18 @@ input[type="text"], input[type="file"], select {
   border-radius: 8px;
 }
 
+.country-divider {
+  background-color: #e9ecef; /* Fondo gris claro */
+  border: 1px solid #007BFF; /* Borde azul */
+  border-radius: 4px; /* Esquinas redondeadas */
+  padding: 10px 15px; /* Espaciado interno */
+  margin: 20px 0; /* Margen superior e inferior */
+  font-size: 20px; /* Tamaño de fuente */
+  font-weight: bold; /* Negrita */
+  color: #007BFF; /* Color del texto azul */
+  text-align: center; /* Centrar texto */
+}
+
 .card {
   background-color: #fff;
   border: 1px solid #ddd;
@@ -77,15 +89,18 @@ input[type="text"], input[type="file"], select {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
+.card-content {
+  margin: 10px 0;
+}
+
+
 .card img {
   max-width: 100px;
   border-radius: 50%;
   margin-bottom: 15px;
 }
 
-.card-content {
-  margin: 10px 0;
-}
+
 
 .skills-list, .hidden-skills-list {
   list-style-type: none;
