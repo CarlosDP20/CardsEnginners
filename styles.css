@@ -183,3 +183,109 @@ input[type="text"], input[type="file"], select {
   background-color: #007BFF;
   color: #fff;
 }
+
+/* Contenedor de las tarjetas en flexbox */
+#cardsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center; /* Centra las tarjetas en el contenedor */
+}
+
+/* Divider de país para que ocupe todo el ancho */
+.country-divider {
+  flex-basis: 100%;
+  background-color: #e9ecef; /* Fondo gris claro */
+  border: 1px solid #007BFF; /* Borde azul */
+  border-radius: 4px; /* Esquinas redondeadas */
+  padding: 10px 15px; /* Espaciado interno */
+  margin: 20px 0; /* Margen superior e inferior */
+  font-size: 20px; /* Tamaño de fuente */
+  font-weight: bold; /* Negrita */
+  color: #007BFF; /* Color del texto azul */
+  text-align: center; /* Centrar texto */
+}
+
+.card {
+  flex: 1 1 calc(33.333% - 20px); /* Tres tarjetas por fila con espacio de 20px entre ellas */
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin: 10px 0;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.card img {
+  max-width: 100%;
+  border-radius: 50%;
+  margin-bottom: 15px;
+}
+
+.card h2 {
+  margin: 10px 0;
+  font-size: 20px;
+  color: #333;
+}
+
+.card p {
+  margin: 5px 0;
+  font-size: 16px;
+  color: #666;
+}
+
+.card .skills-list li, .card .hidden-skills-list li {
+  margin: 8px 0;
+}
+
+.card .progress-bar {
+  width: 100%;
+  background-color: #e9ecef;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 5px 0;
+}
+
+.card .progress-bar div {
+  height: 20px;
+  line-height: 20px;
+  color: #fff;
+  text-align: center;
+  font-size: 14px;
+}
+
+.card .progress-red {
+  background-color: #e74c3c;
+}
+
+.card .progress-yellow {
+  background-color: #f39c12;
+}
+
+.card .progress-green {
+  background-color: #2ecc71;
+}
+
+.card .toggle-skills-btn {
+  display: block;
+  padding: 10px 20px;
+  margin-top: 10px;
+  font-size: 14px;
+  color: #007BFF;
+  background-color: transparent;
+  border: 1px solid #007BFF;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.card .toggle-skills-btn:hover {
+  background-color: #007BFF;
+  color: #fff;
+}

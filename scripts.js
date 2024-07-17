@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", function() {
   
     function renderCards(cardsToRender) {
       cardsContainer.innerHTML = "";
-  
+    
       // Agrupar cartas por país
       const cardsByCountry = {};
       cardsToRender.forEach(card => {
@@ -100,14 +100,14 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         cardsByCountry[card.country].push(card);
       });
-  
+    
       // Renderizar las cartas agrupadas por país
       for (const country in cardsByCountry) {
         const countryDivider = document.createElement("div");
         countryDivider.classList.add("country-divider");
         countryDivider.textContent = `País: ${country}`;
         cardsContainer.appendChild(countryDivider);
-  
+    
         cardsByCountry[country].forEach((card, index) => {
           const sortedSkills = card.skills.slice().sort((a, b) => b.rating - a.rating);
           const visibleSkills = sortedSkills.slice(0, 5);
@@ -133,11 +133,13 @@ document.addEventListener("DOMContentLoaded", function() {
           cardsContainer.appendChild(cardElement);
         });
       }
-  
+    
       attachToggleSkillsListeners();
       attachEditCardListeners();
       attachDeleteCardListeners();
     }
+    
+    
   
     function renderSkill(skill) {
       const progressColor = skill.rating <= 3 ? 'red' : skill.rating <= 7 ? 'yellow' : 'green';
