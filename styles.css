@@ -57,3 +57,21 @@ header {
   height: 20px;
   margin-right: 10px;
 }
+.bottom-right-btns {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
+
+.bottom-right-btns button {
+  background-color: #333;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.bottom-right-btns button:hover {
+  background-color: #444;
+}
